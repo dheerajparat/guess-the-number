@@ -40,8 +40,6 @@ ColorScheme get lightColorScheme {
     onPrimary: AppColors.onPrimaryLight,
     secondary: AppColors.secondary,
     onSecondary: AppColors.onSecondaryLight,
-    background: AppColors.backgroundLight,
-    onBackground: AppColors.onBackgroundLight,
     surface: AppColors.surfaceLight,
     onSurface: AppColors.onSurfaceLight,
     error: AppColors.errorLight,
@@ -55,8 +53,6 @@ ColorScheme get darkColorScheme {
     onPrimary: AppColors.onPrimaryDark,
     secondary: AppColors.secondary,
     onSecondary: AppColors.onSecondaryDark,
-    background: AppColors.backgroundDark,
-    onBackground: AppColors.onBackgroundDark,
     surface: AppColors.surfaceDark,
     onSurface: AppColors.onSurfaceDark,
     error: AppColors.errorDark,
@@ -66,15 +62,16 @@ ColorScheme get darkColorScheme {
 
 AppBarTheme appBarThemeFromScheme(ColorScheme scheme) {
   return AppBarTheme(
-    backgroundColor: scheme.primary,
-    elevation: 4,
+    backgroundColor: scheme.surface,
+    elevation: 0,
+    scrolledUnderElevation: 0,
     centerTitle: true,
     titleTextStyle: TextStyle(
-      color: scheme.onPrimary,
+      color: scheme.primary,
       fontSize: 20,
       fontWeight: FontWeight.bold,
     ),
-    iconTheme: IconThemeData(color: scheme.onPrimary),
+    iconTheme: IconThemeData(color: scheme.primary),
   );
 }
 
@@ -93,7 +90,7 @@ InputDecorationTheme inputDecorationThemeFromScheme(ColorScheme scheme) {
     filled: true,
     fillColor: scheme.surface,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(16),
       borderSide: BorderSide.none,
     ),
     contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -105,9 +102,9 @@ TextTheme textThemeFromScheme(ColorScheme scheme) {
     displayLarge: TextStyle(
       fontSize: 32,
       fontWeight: FontWeight.bold,
-      color: scheme.onBackground,
+      color: scheme.onSurface,
     ),
-    bodyLarge: TextStyle(fontSize: 16, color: scheme.onBackground),
+    bodyLarge: TextStyle(fontSize: 16, color: scheme.onSurface),
     labelLarge: TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.bold,
@@ -118,12 +115,24 @@ TextTheme textThemeFromScheme(ColorScheme scheme) {
 
 ThemeData themeFromScheme(ColorScheme scheme) {
   return ThemeData(
-    useMaterial3: true, // optional, agar M3 use kar rahe ho
+    useMaterial3: true,
     colorScheme: scheme,
     primaryColor: scheme.primary,
-    scaffoldBackgroundColor: scheme.background,
+    scaffoldBackgroundColor: scheme.surface,
     appBarTheme: appBarThemeFromScheme(scheme),
-    buttonTheme: buttonThemeFromScheme(scheme),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: scheme.secondary,
+        foregroundColor: scheme.onSecondary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: scheme.secondary,
+      foregroundColor: scheme.onSecondary,
+    ),
+    cardColor: scheme.surface,
+    // cardTheme removed for SDK compatibility; cardColor provides consistent background
     inputDecorationTheme: inputDecorationThemeFromScheme(scheme),
     textTheme: textThemeFromScheme(scheme),
   );
